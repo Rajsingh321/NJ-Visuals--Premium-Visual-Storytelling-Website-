@@ -9,17 +9,225 @@ const qs  = (s, c=document) => c.querySelector(s);
 const qsa = (s, c=document) => [...c.querySelectorAll(s)];
 
 /* ============================================================
-   0. LOADER — Hide on page load
+   LANGUAGE & TRANSLATION SYSTEM
    ============================================================ */
-const hideLoader = () => {
-  const loader = qs('#loader');
-  if (loader) loader.classList.add('hidden');
+const translations = {
+  en: {
+    'nav.home': 'Home',
+    'nav.services': 'Services',
+    'nav.contact': 'Contact',
+    'nav.careers': 'Careers',
+    'nav.cta': 'Connect with Us',
+    'hero.title': 'WE DON\'T SHOOT<br> WE CRAFT LEGACY',
+    'hero.tagline': 'Indore | Pan India | Destination Worldwide',
+    'hero.cta': 'Work with NJ',
+    'stats.weddings': 'WEDDINGS CRAFTED',
+    'stats.brands': 'BRANDS TRANSFORMATION',
+    'stats.years': 'YEARS OF ARTISTRY',
+    'stats.highlight': 'Same-Day Cinematic Edits available.',
+    'legacy.heading': 'CHOOSE YOUR LEGACY',
+    'service.1.title': 'WEDDING &<br>PRE-WEDDING SHOOTS',
+    'service.1.desc': 'Flawless stories.<br>Cinematic memories.',
+    'service.1.cta': 'Create Your Memories',
+    'service.2.title': 'BRAND BUILDING &<br>SOCIAL MEDIA MARKETING',
+    'service.2.desc': 'Strategies that dominate.<br>Campaigns that convert.',
+    'service.2.cta': 'Scale Your Brand',
+    'service.3.title': 'CREATOR SHOOT &<br>PERSONAL BRAND BUILDING',
+    'service.3.desc': 'Short form. Big impact.<br>Impossible to ignore.',
+    'service.3.cta': 'Start Creating',
+    'trusted.heading': 'Trusted by leading creators and brands',
+  },
+  hi: {
+    'nav.home': 'होम',
+    'nav.services': 'सेवाएं',
+    'nav.contact': 'संपर्क',
+    'nav.careers': 'करियर',
+    'nav.cta': 'हमसे जुड़ें',
+    'hero.title': 'हम शूट नहीं करते<br> हम विरासत बनाते हैं',
+    'hero.tagline': 'इंदौर | पैन इंडिया | दुनिया भर में गंतव्य',
+    'hero.cta': 'NJ के साथ काम करें',
+    'stats.weddings': 'विवाह तैयार किए',
+    'stats.brands': 'ब्रांड परिवर्तन',
+    'stats.years': 'कलात्मकता के वर्ष',
+    'stats.highlight': 'समान-दिन सिनेमाटिक संपादन उपलब्ध है।',
+    'legacy.heading': 'अपनी विरासत चुनें',
+    'service.1.title': 'विवाह और<br>प्री-वेडिंग शूट',
+    'service.1.desc': 'त्रुटिहीन कहानियाँ।<br>सिनेमाटिक यादें।',
+    'service.1.cta': 'अपनी यादें बनाएं',
+    'service.2.title': 'ब्रांड बिल्डिंग और<br>सोशल मीडिया मार्केटिंग',
+    'service.2.desc': 'प्रभुत्व की रणनीति।<br>रूपांतरण अभियान।',
+    'service.2.cta': 'अपना ब्रांड बढ़ाएं',
+    'service.3.title': 'निर्माता शूट और<br>व्यक्तिगत ब्रांड बिल्डिंग',
+    'service.3.desc': 'लघु रूप। बड़ा प्रभाव।<br>अपरिहार्य।',
+    'service.3.cta': 'बनाना शुरू करें',
+    'trusted.heading': 'शीर्ष निर्माताओं और ब्रांडों द्वारा विश्वस्त',
+  },
+  es: {
+    'nav.home': 'Inicio',
+    'nav.services': 'Servicios',
+    'nav.contact': 'Contacto',
+    'nav.careers': 'Carreras',
+    'nav.cta': 'Conéctate con nosotros',
+    'hero.title': 'NO DISPARAMOS<br> CREAMOS LEGADO',
+    'hero.tagline': 'Indore | Pan India | Destino Worldwide',
+    'hero.cta': 'Trabajar con NJ',
+    'stats.weddings': 'BODAS CREADAS',
+    'stats.brands': 'TRANSFORMACIÓN DE MARCAS',
+    'stats.years': 'AÑOS DE ARTESANÍA',
+    'stats.highlight': 'Ediciones cinematográficas del mismo día disponibles.',
+    'legacy.heading': 'ELIGE TU LEGADO',
+    'service.1.title': 'BODAS Y<br>SESIONES PRE-BODA',
+    'service.1.desc': 'Historias impecables.<br>Recuerdos cinematográficos.',
+    'service.1.cta': 'Crea tus recuerdos',
+    'service.2.title': 'CONSTRUCCIÓN DE MARCA Y<br>MARKETING EN REDES SOCIALES',
+    'service.2.desc': 'Estrategias que dominan.<br>Campañas que convierten.',
+    'service.2.cta': 'Amplía tu marca',
+    'service.3.title': 'SESIONES DE CREADOR Y<br>CONSTRUCCIÓN DE MARCA PERSONAL',
+    'service.3.desc': 'Forma corta. Gran impacto.<br>Imposible ignorar.',
+    'service.3.cta': 'Comienza a crear',
+    'trusted.heading': 'Confiado por creadores y marcas líderes',
+  },
+  fr: {
+    'nav.home': 'Accueil',
+    'nav.services': 'Services',
+    'nav.contact': 'Contact',
+    'nav.careers': 'Carrières',
+    'nav.cta': 'Connectez-vous avec nous',
+    'hero.title': 'NOUS NE TOURNONS PAS<br> NOUS CRÉONS L\'HÉRITAGE',
+    'hero.tagline': 'Indore | Pan India | Destination Mondial',
+    'hero.cta': 'Travailler avec NJ',
+    'stats.weddings': 'MARIAGES CRÉÉS',
+    'stats.brands': 'TRANSFORMATION DE MARQUES',
+    'stats.years': 'ANNÉES D\'ARTISANAT',
+    'stats.highlight': 'Éditions cinématographiques du jour même disponibles.',
+    'legacy.heading': 'CHOISISSEZ VOTRE HÉRITAGE',
+    'service.1.title': 'MARIAGES ET<br>SÉANCES PRÉ-MARIAGE',
+    'service.1.desc': 'Des histoires impeccables.<br>Des souvenirs cinématographiques.',
+    'service.1.cta': 'Créez vos souvenirs',
+    'service.2.title': 'CONSTRUCTION DE MARQUE ET<br>MARKETING SUR LES RÉSEAUX SOCIAUX',
+    'service.2.desc': 'Des stratégies qui dominent.<br>Des campagnes qui convertissent.',
+    'service.2.cta': 'Développez votre marque',
+    'service.3.title': 'SÉANCES DE CRÉATEUR ET<br>CONSTRUCTION DE MARQUE PERSONNELLE',
+    'service.3.desc': 'Format court. Grand impact.<br>Impossible à ignorer.',
+    'service.3.cta': 'Commencez à créer',
+    'trusted.heading': 'Approuvé par les créateurs et les marques leaders',
+  },
+  de: {
+    'nav.home': 'Startseite',
+    'nav.services': 'Dienstleistungen',
+    'nav.contact': 'Kontakt',
+    'nav.careers': 'Karriere',
+    'nav.cta': 'Verbinden Sie sich mit uns',
+    'hero.title': 'WIR SCHREITEN NICHT<br> WIR SCHAFFEN VERMÄCHTNIS',
+    'hero.tagline': 'Indore | Pan India | Ziel Worldwide',
+    'hero.cta': 'Mit NJ arbeiten',
+    'stats.weddings': 'HOCHZEITEN GESTALTET',
+    'stats.brands': 'MARKENTRANSFORMATION',
+    'stats.years': 'JAHRE DES HANDWERKS',
+    'stats.highlight': 'Kinematografische Bearbeitungen am selben Tag verfügbar.',
+    'legacy.heading': 'WÄHLEN SIE IHREN ERBE',
+    'service.1.title': 'HOCHZEITEN UND<br>PRE-WEDDING-FOTOSHOOTINGS',
+    'service.1.desc': 'Fehlerlose Geschichten.<br>Kinematografische Erinnerungen.',
+    'service.1.cta': 'Erstelle deine Erinnerungen',
+    'service.2.title': 'MARKENAUFBAU UND<br>SOCIAL-MEDIA-MARKETING',
+    'service.2.desc': 'Strategien, die dominieren.<br>Kampagnen, die konvertieren.',
+    'service.2.cta': 'Erweitern Sie Ihre Marke',
+    'service.3.title': 'CREATOR-SHOOTING UND<br>PERSÖNLICHER MARKENAUFBAU',
+    'service.3.desc': 'Kurzform. Große Wirkung.<br>Unmöglich zu ignorieren.',
+    'service.3.cta': 'Beginnen Sie zu erstellen',
+    'trusted.heading': 'Vertraut von führenden Erstellern und Marken',
+  }
 };
 
-/* Show loader immediately, hide when page fully loads */
-window.addEventListener('load', hideLoader);
-/* Also hide after 3s as fallback (e.g., if images don't load) */
-setTimeout(hideLoader, 3000);
+let currentLang = localStorage.getItem('njLang') || detectBrowserLanguage();
+
+const detectBrowserLanguage = () => {
+  const supported = ['en', 'hi', 'es', 'fr', 'de'];
+  const browserLang = navigator.language.split('-')[0];
+  return supported.includes(browserLang) ? browserLang : 'en';
+};
+
+const setLanguage = (lang) => {
+  if (!translations[lang]) lang = 'en';
+  currentLang = lang;
+  localStorage.setItem('njLang', lang);
+  updatePageContent(lang);
+  if (qs('#langSelect')) qs('#langSelect').value = lang;
+  document.documentElement.lang = lang;
+};
+
+const t = (key) => translations[currentLang]?.[key] || translations['en']?.[key] || key;
+
+const updatePageContent = (lang) => {
+  // Update navigation
+  const navLinks = qsa('.nav-link');
+  if (navLinks[0]) navLinks[0].textContent = t('nav.home');
+  if (navLinks[1]) navLinks[1].textContent = t('nav.services');
+  if (navLinks[2]) navLinks[2].textContent = t('nav.contact');
+  if (navLinks[3]) navLinks[3].textContent = t('nav.careers');
+  
+  const navCTA = qs('.btn-nav-cta');
+  if (navCTA) navCTA.textContent = t('nav.cta');
+
+  // Update hero
+  const heroTitle = qs('.hero-title');
+  if (heroTitle) heroTitle.innerHTML = t('hero.title');
+  const heroTagline = qs('.hero-tagline');
+  if (heroTagline) heroTagline.textContent = t('hero.tagline');
+  const heroCTA = qs('.btn-hero-primary');
+  if (heroCTA) heroCTA.textContent = t('hero.cta');
+
+  // Update stats
+  const statsItems = qsa('.stats-item');
+  if (statsItems[0]) statsItems[0].innerHTML = `<strong class="stats-num" data-target="500">0</strong><strong>+</strong><span>${t('stats.weddings')}</span>`;
+  if (statsItems[1]) statsItems[1].innerHTML = `<span>${t('stats.brands')}</span>`;
+  if (statsItems[2]) statsItems[2].innerHTML = `<strong class="stats-num" data-target="5">0</strong><strong>+</strong><span>${t('stats.years')}</span>`;
+  const statsHighlight = qs('.stats-highlight');
+  if (statsHighlight) statsHighlight.textContent = t('stats.highlight');
+
+  // Update legacy heading
+  const legacyHeading = qs('.legacy-heading');
+  if (legacyHeading) legacyHeading.textContent = t('legacy.heading');
+
+  // Update services
+  const serviceTitles = qsa('.service-title');
+  const serviceDescs = qsa('.service-desc');
+  const serviceCTAs = qsa('.service-cta');
+  
+  if (serviceTitles[0]) serviceTitles[0].innerHTML = t('service.1.title');
+  if (serviceDescs[0]) serviceDescs[0].innerHTML = t('service.1.desc');
+  if (serviceCTAs[0]) serviceCTAs[0].innerHTML = `${t('service.1.cta')} <span class="arrow">→</span>`;
+  
+  if (serviceTitles[1]) serviceTitles[1].innerHTML = t('service.2.title');
+  if (serviceDescs[1]) serviceDescs[1].innerHTML = t('service.2.desc');
+  if (serviceCTAs[1]) serviceCTAs[1].innerHTML = `${t('service.2.cta')} <span class="arrow">→</span>`;
+  
+  if (serviceTitles[2]) serviceTitles[2].innerHTML = t('service.3.title');
+  if (serviceDescs[2]) serviceDescs[2].innerHTML = t('service.3.desc');
+  if (serviceCTAs[2]) serviceCTAs[2].innerHTML = `${t('service.3.cta')} <span class="arrow">→</span>`;
+
+  // Update trusted section
+  const trustedHeading = qs('.trusted-wrap h2');
+  if (trustedHeading) trustedHeading.textContent = t('trusted.heading');
+};
+
+const initLanguageSystem = () => {
+  const langSelect = qs('#langSelect');
+  if (!langSelect) return;
+  
+  // Set initial language based on browser
+  setLanguage(currentLang);
+  
+  langSelect.addEventListener('change', (e) => {
+    setLanguage(e.target.value);
+  });
+};
+
+
+/* ============================================================
+   0. LOADER — REMOVED FOR FASTER LOAD
+   ============================================================ */
+
 
 /* ============================================================
    SHARED — one single submitToSheet used by both forms
@@ -262,11 +470,10 @@ const initBookingModal = () => {
   const modal       = qs('#bookingModal');
   const bg          = qs('#bookingModalBg');
   const close       = qs('#bookingModalClose');
-  const whatsappBtn = qs('#bookingWhatsappBtn');
   const form        = qs('#bookingForm');
   const feedback    = qs('#bookingFeedback');
 
-  if (!openBtn || !modal || !bg || !close || !whatsappBtn || !form) return;
+  if (!openBtn || !modal || !bg || !close || !form) return;
 
   const storageKey = 'njVisualsBookingDraft';
 
@@ -354,9 +561,6 @@ const initBookingModal = () => {
   openBtn.addEventListener('click', openModal);
   close.addEventListener('click', closeModal);
   bg.addEventListener('click', closeModal);
-  whatsappBtn.addEventListener('click', () => {
-    window.open('https://wa.me/918435560026?text=Hi%20NJ%20Visuals,%20I%20want%20to%20discuss%20a%20shoot.', '_blank', 'noopener');
-  });
   ['#bookName','#bookPhone','#bookService','#bookEventDate','#bookBudget','#bookMessage']
     .forEach(sel => qs(sel)?.addEventListener('input', saveDraft));
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) closeModal(); });
@@ -446,6 +650,32 @@ const initApplicationModal = () => {
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) closeModal(); });
 };
 
+
+/* AI */
+
+window.addEventListener('load', () => {
+  document.body.classList.add('loaded');
+});
+
+const initMagnetic = () => {
+  const els = document.querySelectorAll('.btn-primary, .btn-nav-cta');
+
+  els.forEach(el => {
+    el.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+
+      el.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px) scale(1.03)`;
+    });
+
+    el.addEventListener('mouseleave', () => {
+      el.style.transform = '';
+    });
+  });
+};
+
+
 /* ============================================================
    7.7. WHY NJ ROTATOR
    ============================================================ */
@@ -489,19 +719,15 @@ const initWhyNJRotator = () => {
    8. HERO PARALLAX
    ============================================================ */
 const initParallax = () => {
-  const img = qs('.hero-img-left');
-  if (!img || window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  const els = document.querySelectorAll('[data-parallax]');
 
-  let ticking = false;
   window.addEventListener('scroll', () => {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        if (window.scrollY < window.innerHeight)
-          img.style.transform = `translateY(${window.scrollY * 0.22}px)`;
-        ticking = false;
-      });
-      ticking = true;
-    }
+    const scrollY = window.scrollY;
+
+    els.forEach(el => {
+      const speed = parseFloat(el.dataset.parallax) || 0.2;
+      el.style.transform = `translateY(${scrollY * speed}px)`;
+    });
   }, { passive: true });
 };
 
@@ -537,9 +763,9 @@ const initLazyImages = () => {
 };
 
 /* ============================================================
-   11. CUSTOM CURSOR (desktop only)
+   11. CUSTOM CURSOR (desktop only) — REMOVED
    ============================================================ */
-const initCursor = () => {
+/* const initCursor = () => {
   if (window.matchMedia('(pointer:coarse)').matches) return;
 
   const dot  = document.createElement('div');
@@ -582,12 +808,13 @@ const initCursor = () => {
     if (e.target.closest(hover)) { dot.style.width = dot.style.height = '9px'; ring.style.width = ring.style.height = '34px'; }
   });
   document.addEventListener('mouseleave', () => { dot.style.opacity = ring.style.opacity = '0'; });
-};
+}; */
 
 /* ============================================================
    INIT
    ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
+  initLanguageSystem();
   initNavbar();
   initMobileMenu();
   initPortfolioFilter();
@@ -602,7 +829,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initParallax();
   initFooterYear();
   initLazyImages();
-  initCursor();
+  initMagnetic();
+  // initCursor(); // Removed custom cursor animation
 
   console.log('%cNJ Visuals — We Don\'t Shoot. We Craft Legacy. ✦', 'color:#C6A86E;font-family:Georgia,serif;font-size:13px;');
 });
