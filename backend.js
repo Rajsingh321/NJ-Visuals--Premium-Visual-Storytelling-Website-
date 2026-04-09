@@ -8,75 +8,6 @@
 const qs  = (s, c=document) => c.querySelector(s);
 const qsa = (s, c=document) => [...c.querySelectorAll(s)];
 
-
-const t = (key) => translations[currentLang]?.[key] || translations['en']?.[key] || key;
-
-const updatePageContent = (lang) => {
-  // Update navigation
-  const navLinks = qsa('.nav-link');
-  if (navLinks[0]) navLinks[0].textContent = t('nav.home');
-  if (navLinks[1]) navLinks[1].textContent = t('nav.services');
-  if (navLinks[2]) navLinks[2].textContent = t('nav.contact');
-  if (navLinks[3]) navLinks[3].textContent = t('nav.careers');
-  
-  const navCTA = qs('.btn-nav-cta');
-  if (navCTA) navCTA.textContent = t('nav.cta');
-
-  // Update hero
-  const heroTitle = qs('.hero-title');
-  if (heroTitle) heroTitle.innerHTML = t('hero.title');
-  const heroTagline = qs('.hero-tagline');
-  if (heroTagline) heroTagline.textContent = t('hero.tagline');
-  const heroCTA = qs('.btn-hero-primary');
-  if (heroCTA) heroCTA.textContent = t('hero.cta');
-
-  // Update stats
-  const statsItems = qsa('.stats-item');
-  if (statsItems[0]) statsItems[0].innerHTML = `<strong class="stats-num" data-target="500">0</strong><strong>+</strong><span>${t('stats.weddings')}</span>`;
-  if (statsItems[1]) statsItems[1].innerHTML = `<span>${t('stats.brands')}</span>`;
-  if (statsItems[2]) statsItems[2].innerHTML = `<strong class="stats-num" data-target="5">0</strong><strong>+</strong><span>${t('stats.years')}</span>`;
-  const statsHighlight = qs('.stats-highlight');
-  if (statsHighlight) statsHighlight.textContent = t('stats.highlight');
-
-  // Update legacy heading
-  const legacyHeading = qs('.legacy-heading');
-  if (legacyHeading) legacyHeading.textContent = t('legacy.heading');
-
-  // Update services
-  const serviceTitles = qsa('.service-title');
-  const serviceDescs = qsa('.service-desc');
-  const serviceCTAs = qsa('.service-cta');
-  
-  if (serviceTitles[0]) serviceTitles[0].innerHTML = t('service.1.title');
-  if (serviceDescs[0]) serviceDescs[0].innerHTML = t('service.1.desc');
-  if (serviceCTAs[0]) serviceCTAs[0].innerHTML = `${t('service.1.cta')} <span class="arrow">→</span>`;
-  
-  if (serviceTitles[1]) serviceTitles[1].innerHTML = t('service.2.title');
-  if (serviceDescs[1]) serviceDescs[1].innerHTML = t('service.2.desc');
-  if (serviceCTAs[1]) serviceCTAs[1].innerHTML = `${t('service.2.cta')} <span class="arrow">→</span>`;
-  
-  if (serviceTitles[2]) serviceTitles[2].innerHTML = t('service.3.title');
-  if (serviceDescs[2]) serviceDescs[2].innerHTML = t('service.3.desc');
-  if (serviceCTAs[2]) serviceCTAs[2].innerHTML = `${t('service.3.cta')} <span class="arrow">→</span>`;
-
-  // Update trusted section
-  const trustedHeading = qs('.trusted-wrap h2');
-  if (trustedHeading) trustedHeading.textContent = t('trusted.heading');
-};
-
-const initLanguageSystem = () => {
-  const langSelect = qs('#langSelect');
-  if (!langSelect) return;
-  
-  // Set initial language based on browser
-  setLanguage(currentLang);
-  
-  langSelect.addEventListener('change', (e) => {
-    setLanguage(e.target.value);
-  });
-};
-
-
 /* ============================================================
    0. LOADER — REMOVED FOR FASTER LOAD
    ============================================================ */
@@ -667,7 +598,6 @@ const initLazyImages = () => {
    INIT
    ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
-  initLanguageSystem();
   initNavbar();
   initMobileMenu();
   initPortfolioFilter();
