@@ -49,7 +49,7 @@ Our mission is to deliver **luxury-level visuals** that capture emotion, status,
 
 ## ✦ Live Website
 
-👉 [Visit NJ Visuals](https://your-domain.com)
+👉 [Visit NJ Visuals](https://njvisuals.me/)
 
 ---
 
